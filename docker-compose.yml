@@ -1,0 +1,24 @@
+services:
+  master-flat:
+    build: .
+    image: master-flat:latest
+    container_name: master-flat
+    ports:
+      - "8000:8000"
+    # 单次制备须在 256 MiB 内存内完成：硬性限制 + 预留余量的告警线。
+    mem_limit: 256m
+    mem_reservation: 256m
+    memswap_limit: 256m
+    volumes:
+      - flat_products:/data/products
+      - flat_work:/data/work
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  flat_products:
+  flat_work:

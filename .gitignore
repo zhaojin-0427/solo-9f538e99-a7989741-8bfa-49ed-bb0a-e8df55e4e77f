@@ -1,0 +1,9 @@
+# 运行时产物与本地环境
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+work/
+products/
+data/
+*.tmp
